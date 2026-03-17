@@ -1,0 +1,165 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile and role information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "companyName": { "type": "string" },
+        "mobileNumber": { "type": "string" },
+        "experienceYears": { "type": "number" },
+        "role": { "type": "string", "enum": ["admin", "manager", "supervisor"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "projects": {
+      "title": "Project",
+      "description": "Construction project details",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "location": { "type": "string" },
+        "budget": { "type": "number" },
+        "deadline": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["planned", "in-progress", "completed", "on-hold"] },
+        "progress": { "type": "number" },
+        "assignedTeam": { "type": "array", "items": { "type": "string" } },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "budget", "status", "createdBy"]
+    },
+    "labour": {
+      "title": "Labour",
+      "description": "Worker information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "trade": { "type": "string" },
+        "dailyWage": { "type": "number" },
+        "phoneNumber": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "projectId": { "type": "string" }
+      },
+      "required": ["name", "trade", "dailyWage"]
+    },
+    "attendance": {
+      "title": "Attendance",
+      "description": "Daily labour attendance",
+      "type": "object",
+      "properties": {
+        "labourId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["present", "absent", "half-day"] },
+        "projectId": { "type": "string" }
+      },
+      "required": ["labourId", "date", "status", "projectId"]
+    },
+    "materials": {
+      "title": "Material",
+      "description": "Inventory tracking",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "unit": { "type": "string" },
+        "quantity": { "type": "number" },
+        "minThreshold": { "type": "number" },
+        "expiryDate": { "type": "string", "format": "date" },
+        "batchNumber": { "type": "string" },
+        "projectId": { "type": "string" }
+      },
+      "required": ["name", "unit", "quantity", "projectId"]
+    },
+    "expenses": {
+      "title": "Expense",
+      "description": "Financial tracking",
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "category": { "type": "string", "enum": ["material", "labour", "equipment", "other"] },
+        "date": { "type": "string", "format": "date" },
+        "projectId": { "type": "string" },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["amount", "category", "date", "projectId"]
+    },
+    "dpr": {
+      "title": "Daily Progress Report",
+      "description": "Site progress updates",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date" },
+        "workDone": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" },
+        "projectId": { "type": "string" },
+        "submittedBy": { "type": "string" }
+      },
+      "required": ["date", "workDone", "projectId"]
+    },
+    "notifications": {
+      "title": "Notification",
+      "description": "System alerts and notifications",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["low-stock", "overdue", "system"] },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "read": { "type": "boolean" },
+        "projectId": { "type": "string" },
+        "entityId": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["type", "title", "message", "date", "read", "userId"]
+    },
+    "tasks": {
+      "title": "Task",
+      "description": "Project tasks and sub-tasks",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["pending", "in-progress", "completed"] },
+        "progress": { "type": "number" },
+        "dependencies": { "type": "array", "items": { "type": "string" } },
+        "assignee": { "type": "string" }
+      },
+      "required": ["projectId", "title", "startDate", "endDate", "status"]
+    },
+    "income": {
+      "title": "Income",
+      "description": "Project income from owner",
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "source": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "projectId": { "type": "string" },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["description", "amount", "source", "date", "projectId", "recordedBy"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "users", "description": "User profiles" },
+    "/notifications/{notificationId}": { "schema": "notifications", "description": "User notifications" },
+    "/projects/{projectId}": { "schema": "projects", "description": "Main projects" },
+    "/projects/{projectId}/tasks/{taskId}": { "schema": "tasks", "description": "Project tasks" },
+    "/projects/{projectId}/labour/{labourId}": { "schema": "labour", "description": "Labour assigned to project" },
+    "/projects/{projectId}/attendance/{attendanceId}": { "schema": "attendance", "description": "Attendance logs" },
+    "/projects/{projectId}/materials/{materialId}": { "schema": "materials", "description": "Material inventory" },
+    "/projects/{projectId}/expenses/{expenseId}": { "schema": "expenses", "description": "Expense logs" },
+    "/projects/{projectId}/income/{incomeId}": { "schema": "income", "description": "Income logs" },
+    "/projects/{projectId}/dpr/{dprId}": { "schema": "dpr", "description": "Daily progress reports" }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "FM Construction Management -By BESquare ",
+  "description": "A comprehensive construction management system for tracking projects, labour, materials, expenses, and daily site progress with real-time updates.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ]
+}
